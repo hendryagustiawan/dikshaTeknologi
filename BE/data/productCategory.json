@@ -1,0 +1,10 @@
+[
+  {
+    "name": "Food",
+    "active": true
+  },
+  {
+    "name": "Drink",
+    "active": true
+  }
+]
