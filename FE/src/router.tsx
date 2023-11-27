@@ -35,8 +35,11 @@ const Transactions = Loader(
 );
 const Products = Loader(lazy(() => import('src/content/applications/Product')));
 
-// Status
+const ProductVariant = Loader(
+  lazy(() => import('src/content/applications/ProductVariant'))
+);
 
+// Status
 const Status404 = Loader(
   lazy(() => import('src/content/pages/Status/Status404'))
 );
@@ -124,6 +127,19 @@ const routes: RouteObject[] = [
           {
             path: 'items',
             element: <Products />
+          }
+        ]
+      },
+      {
+        path: 'product-variant',
+        children: [
+          {
+            path: '',
+            element: <Navigate to="variant" replace />
+          },
+          {
+            path: 'variant/:id',
+            element: <ProductVariant />
           }
         ]
       }

@@ -1,26 +1,47 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { errorMsg } from 'src/components/Alert/ToasNotification';
+import axios from 'axios';
 
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password')
-    });
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+  const [inputUsername, setInputUsername] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const data = {
+      email: inputEmail,
+      password: inputPassword,
+      username: inputUsername
+    };
+
+    axios({
+      method: 'POST',
+      url: 'http://localhost:3000/user/register',
+      data
+    })
+      .then(() => {
+        navigate('/');
+      })
+      .catch((error) => {
+        error.response.data.message.map((el: any) => {
+          errorMsg(el);
+        });
+      });
   };
 
   return (
@@ -84,6 +105,8 @@ export default function Register() {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={inputEmail}
+                onChange={(e) => setInputEmail(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -94,6 +117,8 @@ export default function Register() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={inputPassword}
+                onChange={(e) => setInputPassword(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -104,6 +129,8 @@ export default function Register() {
                 name="username"
                 autoComplete="username"
                 autoFocus
+                value={inputUsername}
+                onChange={(e) => setInputUsername(e.target.value)}
               />
 
               <Button

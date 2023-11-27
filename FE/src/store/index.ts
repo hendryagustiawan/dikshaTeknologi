@@ -1,14 +1,18 @@
-import { createStore, applyMiddleware, Store, Middleware } from 'redux';
-import thunk, { ThunkMiddleware } from 'redux-thunk';
-import rootReducer, { RootState } from './reducers'; // Create or import your root reducer
+import { configureStore } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import productSlice from './slice/product';
+import transactionSlice from './slice/transaction';
+import productVariantSlice from './slice/productVariant';
 
-const middleware: Array<Middleware<{}, RootState>> = [
-  thunk as ThunkMiddleware<RootState>
-];
+export const store = configureStore({
+  reducer: {
+    product: productSlice,
+    transactions: transactionSlice,
+    productVariant: productVariantSlice
+  }
+});
 
-const store: Store<RootState> = createStore(
-  rootReducer,
-  applyMiddleware(...middleware)
-);
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-export default store;
+export type RootState = ReturnType<typeof store.getState>;

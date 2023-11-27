@@ -10,8 +10,9 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
-import { loginUser } from '../../store/actions/user';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { errorMsg } from 'src/components/Alert/ToasNotification';
 
 const defaultTheme = createTheme();
 
@@ -19,28 +20,31 @@ export default function Login() {
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const data = {
+      email: inputEmail,
+      password: inputPassword
+    };
+
     try {
-      const data = await dispatch(
-        loginUser({
-          email: inputEmail,
-          password: inputPassword
-        })
+      const response = await axios.post(
+        'http://localhost:3000/user/login',
+        data
       );
 
-      if (data && data.role === 'admin') {
-        navigate('/');
+      if (response.data.role === 'admin') {
+        localStorage.setItem('access_token', response.data.access_token);
+        navigate('/dashboards/home');
       } else {
-        navigate('/home-user');
+        localStorage.setItem('access_token', response.data.access_token);
+        navigate('/management/transactions');
       }
-    } catch (err) {
-      console.error('Login failed:', err);
-      // Handle login failure/error here
+    } catch (error) {
+      errorMsg(error.response.data.message);
     }
   };
 
