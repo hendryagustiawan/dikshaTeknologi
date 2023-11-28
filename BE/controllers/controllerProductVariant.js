@@ -26,9 +26,12 @@ class ControllerProductVariant {
   }
 
   static async readProduct(req, res, next) {
+    const id = +req.params.id;
+
     try {
       let data = await ProductVariant.findAll({
         include: [Product],
+        where: { product_id: id },
       });
 
       if (data.length === 0) {

@@ -1,4 +1,4 @@
-const { User, Accommodation } = require("../models");
+const { User } = require("../models");
 const { decodeData } = require("../helpers/jwt");
 
 const authentication = (req, res, next) => {
@@ -6,17 +6,15 @@ const authentication = (req, res, next) => {
     const { access_token } = req.headers;
 
     if (!access_token) {
-      // jika token kosong
       throw { name: "Token Required" };
     } else {
       const decode = decodeData(access_token);
 
-      req.userData = decode; // untuk simpan data Access Token (id, email, role)
+      req.userData = decode;
 
       User.findByPk(req.userData.id)
         .then((user) => {
           if (user) {
-            // jika id user sesuai/ditemukan maka bisa akses
             next();
           }
         })
@@ -29,8 +27,7 @@ const authentication = (req, res, next) => {
   }
 };
 
-// authorization for accomodation
-const authorization = async (req, res, next) => {
+const authorizationn = async (req, res, next) => {
   try {
     const role = req.userData.role;
 
@@ -38,16 +35,7 @@ const authorization = async (req, res, next) => {
       // bisa mengakses ke routingan selanjutnya
       next();
     } else {
-      const id = req.params.id;
-
-      const accommodation = await Accommodation.findByPk(id);
-
-      // jika data kosong
-      if (!accommodation) throw { name: "Not Found" };
-      // untuk hendel user hanya bisa akses sesuai id nya saja
-      if (req.userData.id !== accommodation.UserId) throw { name: "Forbidden" };
-      // jika role staff dan id yang di akses benar
-      next();
+      throw { name: "Forbidden" };
     }
   } catch (error) {
     next(error);
@@ -56,5 +44,5 @@ const authorization = async (req, res, next) => {
 
 module.exports = {
   authentication,
-  authorization,
+  authorizationn,
 };
