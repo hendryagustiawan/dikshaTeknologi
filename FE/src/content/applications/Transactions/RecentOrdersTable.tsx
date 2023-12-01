@@ -18,16 +18,10 @@ import {
   Button
 } from '@mui/material';
 
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../../store';
-import {
-  deleteTransaction,
-  getTransactions
-} from 'src/store/actions/transaction';
-import { errorMsg, successMsg } from 'src/components/Alert/ToasNotification';
+import { getTransactions } from 'src/store/actions/transaction';
+import DataNull from 'src/components/DataNull';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -47,19 +41,6 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = () => {
     (state: RootState) => state.transactions.list.values
   );
 
-  const handleDelete = (id: number) => {
-    if (id)
-      dispatch(deleteTransaction(id))
-        .unwrap()
-        .then((response) => {
-          successMsg(response.message);
-          dispatch(getTransactions());
-        })
-        .catch((error) => {
-          errorMsg(error.response.data.message);
-        });
-  };
-
   const handlePageChange = (event: any, newPage: number): void => {
     setPage(newPage);
   };
@@ -68,7 +49,9 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = () => {
     setLimit(parseInt(event.target.value));
   };
 
-  const theme = useTheme();
+  if (TransactionList.length === 0) {
+    return <DataNull />;
+  }
 
   return (
     <Card>
@@ -82,7 +65,6 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = () => {
               <TableCell>Transaction NO</TableCell>
               <TableCell>Total Amount</TableCell>
               <TableCell align="right">Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -125,41 +107,6 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = () => {
                     >
                       {transaction.active ? 'Active' : 'Not Active'}
                     </Typography>
-                  </TableCell>
-                  <TableCell align="right">
-                    <Tooltip title="Edit" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <EditTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Button
-                      type="button"
-                      onClick={() => handleDelete(transaction.id)}
-                    >
-                      <Tooltip title="Delete" arrow>
-                        <IconButton
-                          sx={{
-                            '&:hover': {
-                              background: theme.colors.error.lighter
-                            },
-                            color: theme.palette.error.main
-                          }}
-                          color="inherit"
-                          size="small"
-                        >
-                          <DeleteTwoToneIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Button>
                   </TableCell>
                 </TableRow>
               );

@@ -18,17 +18,3 @@ export const getTransactions = createAsyncThunk(
     }
   }
 );
-
-export const deleteTransaction = createAsyncThunk(
-  'transaction/deleteTransactions',
-  async (transactionId: number) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/transaction/${transactionId}`
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-);

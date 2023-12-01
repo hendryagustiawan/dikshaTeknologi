@@ -26,6 +26,7 @@ import { RootState, useAppDispatch } from '../../../store';
 import { deleteProduct, getProducts } from '../../../store/actions/product';
 import { errorMsg, successMsg } from 'src/components/Alert/ToasNotification';
 import { Link as RouterLink } from 'react-router-dom';
+import DataNull from 'src/components/DataNull';
 
 interface RecentOrdersTableProps {
   className?: string;
@@ -145,20 +146,33 @@ const RecentOrdersTable: FC<RecentOrdersTableProps> = () => {
                     </Typography>
                   </TableCell>
                   <TableCell align="right">
-                    <Tooltip title="Edit" arrow>
-                      <IconButton
-                        sx={{
-                          '&:hover': {
-                            background: theme.colors.primary.lighter
-                          },
-                          color: theme.palette.primary.main
-                        }}
-                        color="inherit"
-                        size="small"
-                      >
-                        <EditTwoToneIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
+                    <RouterLink
+                      to={`/management/product/edit/${product.id}`}
+                      state={{
+                        id: product.id,
+                        name: product.name,
+                        plu: product.plu,
+                        active: product.active,
+                        product_category_id: product.ProductCategory.id
+                      }}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Tooltip title="Edit" arrow>
+                        <IconButton
+                          sx={{
+                            '&:hover': {
+                              background: theme.colors.primary.lighter
+                            },
+                            color: theme.palette.primary.main
+                          }}
+                          color="inherit"
+                          size="small"
+                        >
+                          <EditTwoToneIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </RouterLink>
+
                     <Button
                       type="button"
                       onClick={() => handleDelete(product.id)}

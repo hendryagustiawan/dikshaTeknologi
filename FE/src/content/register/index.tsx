@@ -38,6 +38,8 @@ export default function Register() {
         navigate('/');
       })
       .catch((error) => {
+        console.log(error);
+
         error.response.data.message.map((el: any) => {
           errorMsg(el);
         });
@@ -100,6 +102,18 @@ export default function Register() {
                 margin="normal"
                 required
                 fullWidth
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                value={inputUsername}
+                onChange={(e) => setInputUsername(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
@@ -119,18 +133,6 @@ export default function Register() {
                 autoComplete="current-password"
                 value={inputPassword}
                 onChange={(e) => setInputPassword(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                autoFocus
-                value={inputUsername}
-                onChange={(e) => setInputUsername(e.target.value)}
               />
 
               <Button

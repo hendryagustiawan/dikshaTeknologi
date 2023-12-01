@@ -58,7 +58,7 @@ const errorHandler = (err, req, res, next) => {
       errMessage = `Does't Access`;
       break;
     case "Not Found":
-      statusCode = 404;
+      statusCode = 204;
 
       errMessage = `Data not Found`;
       break;

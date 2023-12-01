@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getTransactions, deleteTransaction } from '../actions/transaction';
+import { getTransactions } from '../actions/transaction';
 
 export const transactionSlice = createSlice({
   name: 'transaction',
@@ -10,11 +10,7 @@ export const transactionSlice = createSlice({
       values: []
     }
   },
-  reducers: {
-    clearSuccessMessage: (state, payload) => {
-      // TODO: Update state to clear success message
-    }
-  },
+  reducers: {},
 
   extraReducers: (builder) => {
     builder
@@ -24,13 +20,6 @@ export const transactionSlice = createSlice({
         state.list.isLoading = false;
       })
       .addCase(getTransactions.rejected, (state, action) => {
-        state.list.status = 'failed';
-        state.list.isLoading = false;
-      })
-      .addCase(deleteTransaction.fulfilled, (state, action) => {
-        console.log(action);
-      })
-      .addCase(deleteTransaction.rejected, (state, action) => {
         state.list.status = 'failed';
         state.list.isLoading = false;
       });

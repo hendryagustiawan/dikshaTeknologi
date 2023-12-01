@@ -15,10 +15,15 @@ import {
 
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
-import { getProductVariant } from 'src/store/actions/productVariant';
+import {
+  deleteProductVariant,
+  getProductVariant
+} from 'src/store/actions/productVariant';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, useAppDispatch } from '../../../store';
 import { useParams } from 'react-router-dom';
+import { errorMsg, successMsg } from 'src/components/Alert/ToasNotification';
+import DataNull from 'src/components/DataNull';
 
 export default function ImgMediaCard() {
   const dispatch = useAppDispatch();
@@ -34,6 +39,25 @@ export default function ImgMediaCard() {
   const productVariantList = useSelector(
     (state: RootState) => state.productVariant.list.values
   );
+
+  const handleDelete = (idProductVariant: number) => {
+    const numericId = parseInt(id, 10);
+
+    if (idProductVariant)
+      dispatch(deleteProductVariant(idProductVariant))
+        .unwrap()
+        .then((response) => {
+          successMsg(response.message);
+          dispatch(getProductVariant(numericId));
+        })
+        .catch((error) => {
+          errorMsg(error.response.data.message);
+        });
+  };
+
+  if (productVariantList.length === 0) {
+    return <DataNull />;
+  }
 
   const theme = useTheme();
   return (
@@ -80,7 +104,7 @@ export default function ImgMediaCard() {
                   </IconButton>
                 </Tooltip>
               </Button>
-              <Button type="button">
+              <Button type="button" onClick={() => handleDelete(el.id)}>
                 <Tooltip title="Delete" arrow>
                   <IconButton
                     sx={{

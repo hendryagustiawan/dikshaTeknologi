@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getProductVariant, deleteProduct } from '../actions/productVariant';
+import {
+  getProductVariant,
+  deleteProductVariant
+} from '../actions/productVariant';
 
 export const productVariantSlice = createSlice({
   name: 'productVariant',
@@ -8,17 +11,9 @@ export const productVariantSlice = createSlice({
       isLoading: false,
       status: '',
       values: []
-    },
-    save: {
-      isSaving: false,
-      isDeleting: false
     }
   },
-  reducers: {
-    clearSuccessMessage: (state, payload) => {
-      // TODO: Update state to clear success message
-    }
-  },
+  reducers: {},
 
   extraReducers: (builder) => {
     builder
@@ -31,10 +26,10 @@ export const productVariantSlice = createSlice({
         state.list.status = 'failed';
         state.list.isLoading = false;
       })
-      .addCase(deleteProduct.fulfilled, (state, action) => {
+      .addCase(deleteProductVariant.fulfilled, (state, action) => {
         console.log(action);
       })
-      .addCase(deleteProduct.rejected, (state, action) => {
+      .addCase(deleteProductVariant.rejected, (state, action) => {
         state.list.status = 'failed';
         state.list.isLoading = false;
       });

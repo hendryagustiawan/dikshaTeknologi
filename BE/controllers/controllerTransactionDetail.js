@@ -28,11 +28,7 @@ class ControllerTransactionDetail {
     try {
       let data = await TransactionDetail.findAll({ include: [Transaction, ProductVariant] });
 
-      if (data.length === 0) {
-        throw { name: "Not Found" };
-      } else {
-        res.status(200).json(data);
-      }
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }

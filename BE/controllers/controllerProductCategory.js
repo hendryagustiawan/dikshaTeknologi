@@ -23,11 +23,7 @@ class ControllerProductCategory {
     try {
       let data = await ProductCategory.findAll();
 
-      if (data.length === 0) {
-        throw { name: "Not Found" };
-      } else {
-        res.status(200).json(data);
-      }
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }

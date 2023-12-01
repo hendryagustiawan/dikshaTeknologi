@@ -15,4 +15,19 @@ export interface Product {
   };
 }
 
+export interface AddProduct {
+  plu: string;
+  product_category_id: number;
+  name: string;
+  active: boolean;
+}
+
+export interface EditProduct {
+  id: number;
+  plu: string;
+  product_category_id: number;
+  name: string;
+  active: boolean;
+}
+
 export type ProductStatus = true | false;

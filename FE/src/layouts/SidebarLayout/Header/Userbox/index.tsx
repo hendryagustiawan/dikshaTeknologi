@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import {
   Avatar,
@@ -76,6 +76,15 @@ function HeaderUserbox() {
     setOpen(false);
   };
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    if (!localStorage.getItem('access_token')) {
+      navigate('/');
+    }
+  };
+
   return (
     <>
       <UserBoxButton color="secondary" ref={ref} onClick={handleOpen}>
@@ -135,9 +144,14 @@ function HeaderUserbox() {
         </List>
         <Divider />
         <Box sx={{ m: 1 }}>
-          <Button color="primary" fullWidth>
+          <Button
+            color="primary"
+            fullWidth
+            type="button"
+            onClick={handleLogout}
+          >
             <LockOpenTwoToneIcon sx={{ mr: 1 }} />
-            Sign out
+            Log out
           </Button>
         </Box>
       </Popover>

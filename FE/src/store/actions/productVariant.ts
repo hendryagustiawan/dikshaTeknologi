@@ -22,12 +22,12 @@ export const getProductVariant = createAsyncThunk(
   }
 );
 
-export const deleteProduct = createAsyncThunk(
-  'product/deleteProduct',
+export const deleteProductVariant = createAsyncThunk(
+  'product/deleteProductVariant',
   async (ProductId: number) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3000/product/${ProductId}`,
+        `http://localhost:3000/product-variant/${ProductId}`,
         {
           headers: {
             access_token: localStorage.getItem('access_token')

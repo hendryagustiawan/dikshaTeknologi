@@ -34,13 +34,8 @@ class ControllerProductVariant {
         where: { product_id: id },
       });
 
-      if (data.length === 0) {
-        throw { name: "Not Found" };
-      } else {
-        res.status(200).json(data);
-      }
+      res.status(200).json(data);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -52,11 +47,7 @@ class ControllerProductVariant {
     try {
       const productVariant = await ProductVariant.update({ product_id, code, image, name, qty, price, active }, { where: { id }, returning: true });
 
-      if (productVariant[0] === 0) {
-        throw { name: "Not Found" };
-      } else {
-        res.status(200).json(productVariant);
-      }
+      res.status(200).json(productVariant);
     } catch (error) {
       next(error);
     }

@@ -23,14 +23,12 @@ class ControllerTransaction {
   }
 
   static async readTransaction(req, res, next) {
-    try {
-      let data = await Transaction.findAll();
+    let user_id = req.userData.id;
 
-      if (data.length === 0) {
-        throw { name: "Not Found" };
-      } else {
-        res.status(200).json(data);
-      }
+    try {
+      let data = await Transaction.findAll({ where: { user_id } });
+
+      res.status(200).json(data);
     } catch (error) {
       next(error);
     }

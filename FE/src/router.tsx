@@ -34,6 +34,12 @@ const Transactions = Loader(
   lazy(() => import('src/content/applications/Transactions'))
 );
 const Products = Loader(lazy(() => import('src/content/applications/Product')));
+const ProductsAdd = Loader(
+  lazy(() => import('src/content/applications/Product/Add'))
+);
+const ProductsEdit = Loader(
+  lazy(() => import('src/content/applications/Product/Edit'))
+);
 
 const ProductVariant = Loader(
   lazy(() => import('src/content/applications/ProductVariant'))
@@ -47,6 +53,11 @@ const Status500 = Loader(
   lazy(() => import('src/content/pages/Status/Status500'))
 );
 
+const isAuthenticated = (): boolean => {
+  const accessToken = localStorage.getItem('access_token');
+  return accessToken !== null;
+};
+
 const routes: RouteObject[] = [
   {
     path: '',
@@ -59,10 +70,6 @@ const routes: RouteObject[] = [
       {
         path: '/register',
         element: <Register />
-      },
-      {
-        path: 'overview',
-        element: <Navigate to="/" replace />
       },
       {
         path: 'status',
@@ -89,7 +96,11 @@ const routes: RouteObject[] = [
   },
   {
     path: 'dashboards',
-    element: <SidebarLayout />,
+    element: isAuthenticated() ? (
+      <SidebarLayout />
+    ) : (
+      <Navigate to="/" replace />
+    ),
     children: [
       {
         path: '',
@@ -107,7 +118,11 @@ const routes: RouteObject[] = [
   },
   {
     path: 'management',
-    element: <SidebarLayout />,
+    element: isAuthenticated() ? (
+      <SidebarLayout />
+    ) : (
+      <Navigate to="/" replace />
+    ),
     children: [
       {
         path: '',
@@ -127,6 +142,14 @@ const routes: RouteObject[] = [
           {
             path: 'items',
             element: <Products />
+          },
+          {
+            path: 'add',
+            element: <ProductsAdd />
+          },
+          {
+            path: 'edit/:id',
+            element: <ProductsEdit />
           }
         ]
       },
